@@ -1005,49 +1005,47 @@ body {
   mix-blend-mode: multiply;
 }
 #custom-cursor.cursor-hover {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1.2);
-  border-radius: 4px;
-  width: 24px;
-  height: 24px;
-  border: 2px solid #a78bfa;
-  background: rgba(167,139,250,0.2);
-  box-shadow: 0 0 0 4px rgba(167,139,250,0.3), 0 0 20px rgba(167,139,250,0.6);
-  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  animation: cursorPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes cursorPulse {
-  0%, 100% { 
-    transform: translate(-50%, -50%) scale(1.2);
-    box-shadow: 0 0 0 4px rgba(167,139,250,0.3), 0 0 20px rgba(167,139,250,0.6);
-  }
-  50% { 
-    transform: translate(-50%, -50%) scale(1.4);
-    box-shadow: 0 0 0 8px rgba(167,139,250,0.2), 0 0 30px rgba(167,139,250,0.8);
-  }
-}
-
-/* Purple capture effect for hovered elements */
-.cursor-captured {
-  outline: 2px solid #a78bfa !important;
-  outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(167,139,250,0.15), 0 0 12px rgba(167,139,250,0.3) !important;
+  transform: translate(-50%, -50%) scale(1.1);
+  border-color: #a78bfa;
+  background: rgba(167,139,250,0.15);
   transition: all 0.2s ease;
 }
 
-/* Special effects for different element types */
+/* Liquid outline effect for hovered elements */
+.cursor-captured {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cursor-captured::before {
+  content: '';
+  position: absolute;
+  top: -2px; left: -2px; right: -2px; bottom: -2px;
+  background: linear-gradient(45deg, #a78bfa, #c084fc, #a78bfa);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: liquidFlow 2s ease-in-out infinite;
+}
+
+.cursor-captured:hover::before {
+  opacity: 1;
+}
+
+@keyframes liquidFlow {
+  0%, 100% { 
+    background: linear-gradient(45deg, #a78bfa, #c084fc, #a78bfa);
+  }
+  50% { 
+    background: linear-gradient(45deg, #c084fc, #a78bfa, #c084fc);
+  }
+}
+
+/* Subtle lift effect */
 .cursor-captured.project-card {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(167,139,250,0.2) !important;
-}
-
-.cursor-captured.cta-btn {
-  box-shadow: 0 0 20px rgba(167,139,250,0.4) !important;
-}
-
-.cursor-captured img {
-  filter: brightness(1.1) saturate(1.1);
+  transform: translateY(-1px);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Fun widget */
@@ -1079,4 +1077,5 @@ body {
 .project-card:hover, .aboutme-lab-left:hover, .timeline-content:hover, .contact-form:hover, .hero-content:hover {
   box-shadow: 0 12px 36px 0 #60a5fa44;
   transform: translateY(-4px) scale(1.015);
+} 
 } 
