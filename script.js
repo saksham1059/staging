@@ -226,10 +226,16 @@ document.addEventListener('mousemove', e => {
   mouseY = e.clientY;
 });
 // Cursor hover effect
-const hoverables = ['a', 'button', '.cta-btn', '.project-card', '.nav-link'];
+const hoverables = ['a', 'button', '.cta-btn', '.project-card', '.nav-link', '.tags span', '.service-card', '.faq-item', 'img', '.tech-icon', '.skill-item', '.aboutme-skill', '.aboutme-stat', '.project-card img', '.service-card img'];
 document.querySelectorAll(hoverables.join(',')).forEach(el => {
-  el.addEventListener('mouseenter', () => cursor.classList.add('cursor-hover'));
-  el.addEventListener('mouseleave', () => cursor.classList.remove('cursor-hover'));
+  el.addEventListener('mouseenter', () => {
+    cursor.classList.add('cursor-hover');
+    el.classList.add('cursor-captured');
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.classList.remove('cursor-hover');
+    el.classList.remove('cursor-captured');
+  });
 });
 
 // Remove dark mode logic from floating-action-btn
