@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watch Free Movies</title>
+  
+  <!-- Vidstack CSS -->
+  <link rel="stylesheet" href="https://cdn.vidstack.io/player/theme.css" />
+  <link rel="stylesheet" href="https://cdn.vidstack.io/player/video.css" />
+  
+  <!-- Vidstack JS -->
+  <script src="https://cdn.vidstack.io/player" type="module"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: black;
+    }
+    media-player {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      margin: 0;
+    }
+    media-video-layout {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    /* Modal styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+    .modal-content {
+      background-color: #fff;
+      padding: 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+    .modal-content h2 {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+    .language-options button {
+      display: block;
+      margin: 10px auto;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .language-options button:hover {
+      background-color: #0056b3;
+    }
+    /* Error message styles */
+    #errorMessage {
+      display: none;
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px;
+      background-color: black;
+      color: white;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Player -->
+  <media-player 
+       controls-delay="10000"
+       title="Movie Title"
+       crossorigin="anonymous"
+       src="">
+    <media-provider>
+      <media-poster class="vds-poster" src="" alt="Movie Poster"></media-poster>
+    </media-provider>
+    <media-video-layout thumbnails=""></media-video-layout>
+  </media-player>
+
+  <!-- Language Selection Modal -->
+  <div id="languageModal" class="modal">
+    <div class="modal-content">
+      <h2>Select Language</h2>
+      <div class="language-options" id="languageOptions"></div>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div id="errorMessage">Something went wrong. Please try again later.</div>
+
+  <script>
+    const mediaPlayer = document.querySelector('media-player');
+    const languageModal = document.getElementById('languageModal');
+    const languageOptionsDiv = document.getElementById('languageOptions');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    let selectedLanguageFile = '';
+
+    // Display error messages
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.style.display = 'block';
+      setTimeout(() => {
+        errorMessage.style.display = 'none';
+      }, 3000);
+    }
+
+    // Fetch OMDB data for title and poster
+    async function fetchOmdbData(imdbId) {
+      const omdbApiKey = '19340f98';
+      const omdbApiUrl = 'https://www.omdbapi.com/';
+      try {
+        const response = await fetch(`${omdbApiUrl}?i=${imdbId}&apikey=${omdbApiKey}`);
+        if (!response.ok) throw new Error('OMDB API failed');
+        const data = await response.json();
+        if (data.Response === 'True') {
+          console.log("OMDB Data:", data);
+          return {
+            title: data.Title,
+            poster: data.Poster !== 'N/A' ? data.Poster : ''
+          };
+        } else {
+          throw new Error('Movie not found on OMDB.');
+        }
+      } catch (err) {
+        showError('Error fetching movie data.');
+        console.error(err);
+        return null;
+      }
+    }
+
+    // Fetch stream from 8stream, convert URL to 1080p, and set it on the player
+    async function fetchStream(file, key) {
+      try {
+        const apiUrl = `https://8stream.sakshamchugh.com/api/v1/getStream`;
+        const streamResponse = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ file, key })
+        });
+        if (!streamResponse.ok) throw new Error("Failed to fetch stream link.");
+        const streamData = await streamResponse.json();
+        if (!streamData.success) throw new Error("Failed to fetch stream link.");
+        
+        // Convert the stream URL (e.g., changing from 720p to 1080p)
+        const originalStreamUrl = streamData.data.link.replace("./720/index.m3u8", "./1080/index.m3u8");
+        console.log("Original Stream URL:", originalStreamUrl);
+
+        // Set the player's source to the original URL and start playback
+        mediaPlayer.src = originalStreamUrl;
+        mediaPlayer.play();
+
+      } catch (error) {
+        showError(error.message);
+        console.error(error);
+      }
+    }
+
+    // Fetch and display available language options
+    async function fetchLanguages(imdbId) {
+      try {
+        const mediaInfoUrl = `https://8stream.sakshamchugh.com/api/v1/mediaInfo?id=${imdbId}`;
+        const mediaInfoResponse = await fetch(mediaInfoUrl);
+        if (!mediaInfoResponse.ok) throw new Error("Failed to fetch media info.");
+        const mediaInfoData = await mediaInfoResponse.json();
+        if (!mediaInfoData.success) throw new Error("Failed to fetch media info.");
+        
+        const { key, playlist } = mediaInfoData.data;
+        console.log("Available Languages:", playlist);
+
+        // Clear existing language options
+        languageOptionsDiv.innerHTML = '';
+        playlist.forEach(language => {
+          const btn = document.createElement('button');
+          btn.textContent = language.title || 'Unknown Language';
+          btn.onclick = (event) => {
+            event.preventDefault();
+            selectedLanguageFile = language.file;
+            loadStreamForSelectedLanguage(selectedLanguageFile, key);
+          };
+          languageOptionsDiv.appendChild(btn);
+        });
+        languageModal.style.display = 'flex';
+      } catch (error) {
+        showError(error.message);
+        console.error(error);
+      }
+    }
+
+    // When a language is selected, load the stream using the original URL
+    function loadStreamForSelectedLanguage(file, key) {
+      languageModal.style.display = 'none';
+      fetchStream(file, key);
+    }
+
+    // On page load, fetch movie data and available languages
+    window.onload = async function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const imdbId = urlParams.get('id');
+      if (!imdbId) {
+        showError("IMDb ID is missing from the URL.");
+        return;
+      }
+      
+      // Fetch and display movie title and poster from OMDB
+      const movieData = await fetchOmdbData(imdbId);
+      if (movieData) {
+        mediaPlayer.title = movieData.title;
+        mediaPlayer.querySelector('media-poster').src = movieData.poster;
+      }
+      
+      // Fetch language options for the movie
+      fetchLanguages(imdbId);
+    };
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+.aboutme-lab-left { padding: 1.2rem; }
+.aboutme-avatar-box { display: flex; justify-content: center; }
+.aboutme-avatar { width: 220px; max-width: 100%; border-radius: 1rem; box-shadow: 0 8px 32px 0 #60a5fa33; }
+.aboutme-header { margin-top: 0.8rem; }
+.aboutme-skills-box { margin-top: 1rem; }
+.aboutme-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin-top: 1rem; }
+.stat-card { background: rgba(12,36,72,0.9); border: 1.5px solid #2a6cff88; border-radius: 0.8rem; padding: 0.8rem 0.6rem; text-align: center; }
+.stat-num { font-family: 'Space Grotesk', Arial, sans-serif; font-weight: 800; color: #8cc7ff; font-size: 1.4rem; }
+.stat-label { color: #cfe9ff; font-size: 0.85rem; }
+
+@media (max-width: 900px) {
+  .aboutme-avatar { width: 180px; }
+  .aboutme-stats { grid-template-columns: repeat(3, minmax(0,1fr)); }
+}
+

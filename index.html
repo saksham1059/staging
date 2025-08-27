@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saksham Chugh | Developer Portfolio</title>
+  <meta name="description" content="Portfolio of Saksham Chugh — developer crafting fast, accessible and beautiful web experiences using JS, React, Node, and 3D graphics.">
+  <meta name="author" content="Saksham Chugh">
+  <meta name="robots" content="index,follow">
+  <meta name="theme-color" content="#2563eb">
+  <link rel="canonical" href="https://sakshamchugh.dev/">
+
+  <meta property="og:title" content="Saksham Chugh | Developer Portfolio">
+  <meta property="og:description" content="Developer crafting fast, accessible and beautiful web experiences.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sakshamchugh.dev/">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=1200&q=80">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Saksham Chugh | Developer Portfolio">
+  <meta name="twitter:description" content="Developer crafting fast, accessible and beautiful web experiences.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?auto=format&fit=crop&w=1200&q=80">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="about.css">
+  <link rel="stylesheet" href="animations.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <script defer src="https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.min.js"></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Saksham Chugh",
+    "url": "https://sakshamchugh.dev/",
+    "image": "https://images.unsplash.com/photo-1527980965255-d3b416303d12?auto=format&fit=crop&w=640&q=60",
+    "jobTitle": "Web Developer",
+    "worksFor": { "@type": "Organization", "name": "Freelance" },
+    "sameAs": [
+      "https://github.com/your-username",
+      "https://www.linkedin.com/in/your-username/",
+      "https://twitter.com/your-username"
+    ]
+  }
+  </script>
+  <script defer src="three-hero.js"></script>
+</head>
+<body>
+  <div id="transition-container" aria-hidden="true">
+    <svg id="transition-wave-svg" width="100%" height="520" viewBox="0 0 1440 520" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="waveGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#2563eb" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#60a5fa" stop-opacity="1"/>
+        </linearGradient>
+      </defs>
+      <path fill="url(#waveGrad)" d="M0,96L48,112C96,128,192,160,288,176C384,192,480,192,576,165.3C672,139,768,85,864,96C960,107,1056,181,1152,186.7C1248,192,1344,128,1392,96L1440,64L1440,520L1392,520C1344,520,1248,520,1152,520C1056,520,960,520,864,520C768,520,672,520,576,520C480,520,384,520,288,520C192,520,96,520,48,520L0,520Z"/>
+    </svg>
+    <svg id="transition-wave-svg-bottom" width="100%" height="520" viewBox="0 0 1440 520" xmlns="http://www.w3.org/2000/svg">
+      <path fill="url(#waveGrad)" d="M0,96L48,112C96,128,192,160,288,176C384,192,480,192,576,165.3C672,139,768,85,864,96C960,107,1056,181,1152,186.7C1248,192,1344,128,1392,96L1440,64L1440,520L1392,520C1344,520,1248,520,1152,520C1056,520,960,520,864,520C768,520,672,520,576,520C480,520,384,520,288,520C192,520,96,520,48,520L0,520Z"/>
+    </svg>
+  </div>
+  <a class="skip-link" href="#hero">Skip to content</a>
+  <div class="parallax-bg">
+    <div class="parallax-shape parallax-shape1"></div>
+    <div class="parallax-shape parallax-shape2"></div>
+    <div class="parallax-shape parallax-shape3"></div>
+  </div>
+  <nav class="navbar" id="navbar" aria-label="Primary">
+    <div class="container nav-content">
+      <a href="#hero" class="logo" aria-label="Go to home">Saksham Chugh</a>
+      <ul class="nav-links" id="navLinks" role="menubar">
+        <li role="none"><a role="menuitem" href="#hero" class="nav-link active" aria-current="page">Home</a></li>
+        <li role="none"><a role="menuitem" href="#projects" class="nav-link">Projects</a></li>
+        <li role="none"><a role="menuitem" href="#techstack" class="nav-link">Tech</a></li>
+        <li role="none"><a role="menuitem" href="#timeline" class="nav-link">Experience</a></li>
+        <li role="none"><a role="menuitem" href="#services" class="nav-link">Services</a></li>
+        <li role="none"><a role="menuitem" href="#about" class="nav-link">About</a></li>
+        <li role="none"><a role="menuitem" href="#faq" class="nav-link">FAQ</a></li>
+        <li role="none"><a role="menuitem" href="#contact" class="nav-link">Contact</a></li>
+        <li role="none"><a role="menuitem" href="#socials" class="nav-link">Socials</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-controls="navLinks" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="menu-overlay" id="menuOverlay"></div>
+  <div class="hero-bg">
+    <svg viewBox="0 0 1440 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#60a5fa"/>
+          <stop offset="100%" stop-color="#a78bfa"/>
+        </linearGradient>
+      </defs>
+      <circle cx="720" cy="300" r="400" fill="url(#grad1)" fill-opacity="0.18">
+        <animate attributeName="r" values="400;420;400" dur="8s" repeatCount="indefinite"/>
+      </circle>
+      <ellipse cx="900" cy="100" rx="120" ry="60" fill="#60a5fa" fill-opacity="0.12">
+        <animate attributeName="rx" values="120;140;120" dur="7s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="400" cy="500" rx="90" ry="40" fill="#a78bfa" fill-opacity="0.13">
+        <animate attributeName="ry" values="40;60;40" dur="6s" repeatCount="indefinite"/>
+      </ellipse>
+    </svg>
+    <pre class="floating-code">{ /* <span>const dev = 'Saksham';</span> */ }</pre>
+  </div>
+  <main>
+    <section id="hero" class="hero-section animated scale-in">
+      <div class="hero-three-bg">
+        <canvas id="three-hero"></canvas>
+      </div>
+      <div class="container hero-content">
+        <h1 class="typing-headline slide-up animated">Hi, I'm <span class="highlight">Saksham Chugh</span></h1>
+        <h2 id="typed-text" class="slide-up animated"></h2>
+        <p class="fade-in animated">A passionate developer crafting high-tech, clean web experiences. Welcome to my portfolio!</p>
+        <div class="hero-btns fade-in animated">
+          <a href="#projects" class="cta-btn brand-hover">See My Projects</a>
+        </div>
+      </div>
+      <div class="scroll-indicator">
+        <span>Scroll</span>
+        <svg width="24" height="24" fill="none" stroke="#2563eb" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+      </div>
+    </section>
+    <section id="projects" class="projects-section container animated reveal-up">
+      <h2>Featured Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card animated scale-in" data-tag="HTML CSS JS">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=400&q=80" alt="AI Portfolio project screenshot">
+          <h3>AI Portfolio</h3>
+          <p>A modern portfolio powered by AI and 3D graphics.</p>
+          <div class="tags"><span class="brand-hover">HTML</span><span class="brand-hover">CSS</span><span class="brand-hover">JS</span></div>
+        </div>
+        <div class="project-card animated scale-in" data-tag="API Design">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=400&q=80" alt="Crypto Dashboard project screenshot">
+          <h3>Crypto Dashboard</h3>
+          <p>A real-time dashboard for tracking crypto assets.</p>
+          <div class="tags"><span class="brand-hover">API</span><span class="brand-hover">Design</span></div>
+        </div>
+        <div class="project-card animated scale-in" data-tag="UI/UX Components">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Design System project screenshot">
+          <h3>Design System</h3>
+          <p>Reusable UI components for rapid prototyping.</p>
+          <div class="tags"><span class="brand-hover">UI/UX</span><span class="brand-hover">Components</span></div>
+        </div>
+        <div class="project-card animated scale-in" data-tag="Next.js SSR">
+          <img loading="lazy" src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=400&q=80" alt="SaaS Landing project screenshot">
+          <h3>SaaS Landing</h3>
+          <p>SEO-focused landing page with blazing performance and analytics.</p>
+          <div class="tags"><span class="brand-hover">Next.js</span><span class="brand-hover">SSR</span><span class="brand-hover">SEO</span></div>
+        </div>
+      </div>
+    </section>
+    <section id="techstack" class="techstack-section container animated reveal-up">
+      <h2>Tech Stack</h2>
+      <div class="tech-icons">
+        <div class="animated scale-in"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML5"><span>HTML5</span></div>
+        <div class="animated scale-in"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS3"><span>CSS3</span></div>
+        <div class="animated scale-in"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JavaScript"><span>JavaScript</span></div>
+        <div class="animated scale-in"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" alt="React"><span>React</span></div>
+        <div class="animated scale-in"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" alt="Node.js"><span>Node.js</span></div>
+        <div class="animated scale-in"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" alt="Python"><span>Python</span></div>
+        <div class="animated scale-in"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" alt="Git"><span>Git</span></div>
+        <div class="animated scale-in"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" alt="Linux"><span>Linux</span></div>
+      </div>
+    </section>
+    <section id="timeline" class="timeline-section container animated reveal-up">
+      <h2>Experience Timeline</h2>
+      <div class="timeline">
+        <div class="timeline-item animated slide-up">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <h3>2024 - Present</h3>
+            <p>Freelance Web Developer & Programmer</p>
+          </div>
+        </div>
+        <div class="timeline-item animated slide-up">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <h3>2022 - 2024</h3>
+            <p>Frontend Developer at Tech Startup</p>
+          </div>
+        </div>
+        <div class="timeline-item animated slide-up">
+          <div class="timeline-dot"></div>
+          <div class="timeline-content">
+            <h3>2020 - 2022</h3>
+            <p>CS Student & Open Source Contributor</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="workingon" class="workingon-section container animated reveal-up">
+      <h2>What I’m Working On</h2>
+      <p>Currently building a 3D interactive portfolio, contributing to open source, and exploring AI-powered web apps. Always learning, always shipping!</p>
+    </section>
+    <section id="about" class="aboutme-lab-section container animated reveal-up">
+      <div class="aboutme-lab-grid">
+        <div class="aboutme-lab-left animated scale-in">
+          <div class="aboutme-avatar-box">
+            <img class="aboutme-avatar" src="https://api.dicebear.com/7.x/big-smile/svg?seed=Saksham" alt="Avatar illustration">
+          </div>
+          <div class="aboutme-header">
+            <div class="aboutme-stat"><span class="stat-label">Name</span><span class="stat-value">Saksham</span></div>
+            <div class="aboutme-stat"><span class="stat-label">Age</span><span class="stat-value">16</span></div>
+            <div class="aboutme-stat"><span class="stat-label">From</span><span class="stat-value">Panipat, India</span></div>
+          </div>
+          <div class="aboutme-skills-box">
+            <div class="aboutme-skills-title">SKILLS</div>
+            <div class="aboutme-skill"><span><img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" alt="CSS">CSS</span><div class="aboutme-bar"><div class="aboutme-bar-fill" style="--bar:82%"></div></div></div>
+            <div class="aboutme-skill"><span><img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" alt="JS">JS</span><div class="aboutme-bar"><div class="aboutme-bar-fill" style="--bar:78%"></div></div></div>
+            <div class="aboutme-skill"><span><img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" alt="HTML">HTML</span><div class="aboutme-bar"><div class="aboutme-bar-fill" style="--bar:90%"></div></div></div>
+            <div class="aboutme-skill"><span><img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" alt="OS">OS torturing</span><div class="aboutme-bar"><div class="aboutme-bar-fill" style="--bar:68%"></div></div></div>
+            <div class="aboutme-skill"><span><img class="skill-icon" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg" alt="Editing">Editing</span><div class="aboutme-bar"><div class="aboutme-bar-fill" style="--bar:60%"></div></div></div>
+          </div>
+          <div class="aboutme-stats">
+            <div class="stat-card"><div class="stat-num" data-count="12">0</div><div class="stat-label">Projects</div></div>
+            <div class="stat-card"><div class="stat-num" data-count="4">0</div><div class="stat-label">Years Coding</div></div>
+            <div class="stat-card"><div class="stat-num" data-count="15">0</div><div class="stat-label">Technologies</div></div>
+          </div>
+          <div class="aboutme-facts-box">
+            <div class="aboutme-facts-title">ABOUT</div>
+            <div class="aboutme-fact"><svg width="24" height="24" fill="none" stroke="#60a5fa" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg> Started coding at 12. Currently exploring Unity alongside web dev.</div>
+            <div class="aboutme-fact"><svg width="24" height="24" fill="none" stroke="#60a5fa" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="7" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg> I stress‑test operating systems for fun and knowledge. Results: amusing.</div>
+            <div class="aboutme-fact"><svg width="24" height="24" fill="none" stroke="#60a5fa" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20v-6M6 12l6-8 6 8"/></svg> Gamer turned maker — building games and the web experiences behind them.</div>
+          </div>
+          <div class="fun-widget" aria-live="polite">Testing protocol: UI enhancements increase cake probability by 0%. Build success still required.</div>
+        </div>
+        <div class="aboutme-lab-right">
+          <img class="aboutme-lab-3d" loading="lazy" src="https://assets-global.website-files.com/63e4b7b6e7b7e2b2e2e2e2e2/63e4b7b6e7b7e2b2e2e2e2e2_3d-character.png" alt="3D Lab Character" />
+        </div>
+      </div>
+    </section>
+    <section id="services" class="services-section container animated slide-up" aria-labelledby="services-title">
+      <h2 id="services-title">Services</h2>
+      <div class="services-grid">
+        <article class="service-card">
+          <h3>Web Apps</h3>
+          <p>Responsive, accessible apps using modern stacks and performance best practices.</p>
+        </article>
+        <article class="service-card">
+          <h3>UI/UX</h3>
+          <p>Clean, user-first interfaces, rapid prototyping, and design systems.</p>
+        </article>
+        <article class="service-card">
+          <h3>APIs</h3>
+          <p>RESTful APIs with auth, testing, and clear documentation.</p>
+        </article>
+      </div>
+    </section>
+    <section id="faq" class="faq-section container animated slide-up" aria-labelledby="faq-title">
+      <h2 id="faq-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <button class="faq-item" aria-expanded="false">
+          <span>What stacks do you work with?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-panel" hidden>
+          <p>JavaScript/TypeScript, React, Node.js, REST APIs, and Three.js for 3D.</p>
+        </div>
+        <button class="faq-item" aria-expanded="false">
+          <span>Do you take freelance work?</span>
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-panel" hidden>
+          <p>Yes. Get in touch via the contact form below.</p>
+        </div>
+      </div>
+    </section>
+    <section id="contact" class="contact-section container animated reveal-up">
+      <h2>Contact Me</h2>
+      <form class="contact-form animated scale-in">
+        <input type="text" placeholder="Name" required>
+        <input type="email" placeholder="Email" required>
+        <textarea placeholder="Message" required></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </section>
+    <section id="socials" class="socials-section container animated slide-up">
+      <h2>Find me on</h2>
+      <div class="social-icons">
+        <a href="https://twitter.com/your-username" target="_blank" rel="noopener" class="animated scale-in" title="Twitter">🐦</a>
+        <a href="https://www.linkedin.com/in/your-username/" target="_blank" rel="noopener" class="animated scale-in" title="LinkedIn">💼</a>
+        <a href="https://instagram.com/your-username" target="_blank" rel="noopener" class="animated scale-in" title="Instagram">📸</a>
+        <a href="https://github.com/your-username" target="_blank" rel="noopener" class="animated scale-in" title="GitHub">👨‍💻</a>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="container">&copy; 2024 Saksham Chugh. All rights reserved.</div>
+  </footer>
+  <button id="floating-action-btn" title="Toggle theme or go up"><span id="fab-icon"></span></button>
+  <div id="custom-cursor"></div>
+  <script src="script.js"></script>
+</body>
+</html> 

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stream Video</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.14.3/video-js.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <link rel="stylesheet" href="https://cdn.vidstack.io/player/theme.css" />
+  <link rel="stylesheet" href="https://cdn.vidstack.io/player/video.css" />
+
+  <style>
+    /* Base Styles */
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #141E30, #243B55);
+      color: #fff;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.75);
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+    label {
+      font-size: 1.1rem;
+      display: block;
+      margin: 15px 0 5px;
+    }
+    button.play-btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 4px;
+      background-color: #E50914;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      margin-top: 20px;
+    }
+    button.play-btn:hover {
+      background-color: #bf0811;
+      transform: scale(1.02);
+    }
+    /* Animated Cards Container */
+    .selector-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    .selector-container button {
+      flex: 1 1 120px;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    }
+    .selector-container button.active,
+    .selector-container button:hover {
+      background: rgba(229, 9, 20, 0.8);
+      transform: scale(1.05);
+      border-color: #E50914;
+    }
+    /* Animations */
+    .fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Full-screen video container */
+    #video-container {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    #media-player {
+      width: 100%;
+      height: 100%;
+    }
+    @media (max-width: 600px) {
+      .selector-container button {
+        flex: 1 1 100px;
+        font-size: 0.9rem;
+      }
+      .container {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Select Season, Episode, and Language</h1>
+
+    <label>Season:</label>
+    <div id="season-container" class="selector-container"></div>
+
+    <label>Episode:</label>
+    <div id="episode-container" class="selector-container"></div>
+
+    <label>Language:</label>
+    <div id="language-container" class="selector-container"></div>
+
+    <button class="play-btn" onclick="loadVideo()">Play</button>
+  </div>
+
+  <div id="video-container">
+    <media-player
+      id="media-player"
+      controls-delay="10000"
+      title=""
+      src=""
+    >
+      <media-provider>
+        <media-poster
+          class="vds-poster"
+          src=""
+          alt="Poster"
+        ></media-poster>
+      </media-provider>
+      <media-video-layout thumbnails=""></media-video-layout>
+    </media-player>
+  </div>
+
+  <script src="https://cdn.vidstack.io/player" type="module"></script>
+  <script>
+    let data; // Global variable to hold series media info
+    let titlex = '';
+    let thumbnail = '';
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const mediaId = urlParams.get('id');
+    if (!mediaId) {
+      alert('No media ID found in the URL!');
+      throw new Error('No media ID found');
+    }
+
+    // Fetch OMDB data
+    const apiKey = '19340f98';
+    const imdbId = mediaId.split(':')[0];
+    fetch(`https://www.omdbapi.com/?apikey=${apiKey}&i=${imdbId}`)
+      .then(response => response.json())
+      .then(omdbData => {
+        if (omdbData.Response === 'True') {
+          titlex = omdbData.Title;
+          thumbnail = omdbData.Poster;
+        } else {
+          console.error('Error:', omdbData.Error);
+        }
+      })
+      .catch(error => console.error('OMDB Fetch Error:', error));
+
+    // Fetch series media info
+    const apiUrl = `https://8stream.sakshamchugh.com/api/v1/mediaInfo?id=${mediaId}`;
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(responseData => {
+        data = responseData;
+        const seasons = data.data.playlist;
+        const seasonContainer = document.getElementById("season-container");
+        seasonContainer.innerHTML = '';
+        seasons.forEach((season, index) => {
+          let btn = document.createElement("button");
+          btn.textContent = season.title;
+          btn.value = index;
+          btn.classList.add("fade-in");
+          btn.onclick = () => {
+            setActive('season', index);
+            updateEpisodes();
+          };
+          if(index === 0) btn.classList.add("active");
+          seasonContainer.appendChild(btn);
+        });
+        updateEpisodes();
+      })
+      .catch(error => {
+        console.error('Error fetching media info:', error);
+        alert('Error fetching media data.');
+      });
+
+    function setActive(type, index) {
+      let container;
+      if (type === 'season') {
+        container = document.getElementById("season-container");
+      } else if (type === 'episode') {
+        container = document.getElementById("episode-container");
+      } else if (type === 'language') {
+        container = document.getElementById("language-container");
+      }
+      Array.from(container.children).forEach((btn, i) => {
+        btn.classList.toggle("active", i == index);
+      });
+    }
+
+    function updateEpisodes() {
+      const seasonContainer = document.getElementById("season-container");
+      const activeSeasonButton = Array.from(seasonContainer.children).find(btn => btn.classList.contains("active"));
+      const seasonIndex = activeSeasonButton ? activeSeasonButton.value : 0;
+      const episodes = data.data.playlist[seasonIndex].folder;
+      const episodeContainer = document.getElementById("episode-container");
+      episodeContainer.innerHTML = '';
+      episodes.forEach((episode, index) => {
+        let btn = document.createElement("button");
+        btn.textContent = episode.title;
+        btn.value = index;
+        btn.classList.add("fade-in");
+        btn.onclick = () => {
+          setActive('episode', index);
+          updateLanguages();
+        };
+        if(index === 0) btn.classList.add("active");
+        episodeContainer.appendChild(btn);
+      });
+      updateLanguages();
+    }
+
+    function updateLanguages() {
+      const seasonContainer = document.getElementById("season-container");
+      const episodeContainer = document.getElementById("episode-container");
+      const activeSeasonButton = Array.from(seasonContainer.children).find(btn => btn.classList.contains("active"));
+      const activeEpisodeButton = Array.from(episodeContainer.children).find(btn => btn.classList.contains("active"));
+      const seasonIndex = activeSeasonButton ? activeSeasonButton.value : 0;
+      const episodeIndex = activeEpisodeButton ? activeEpisodeButton.value : 0;
+      const episode = data.data.playlist[seasonIndex].folder[episodeIndex];
+      const languageContainer = document.getElementById("language-container");
+      languageContainer.innerHTML = '';
+      episode.folder.forEach((language, index) => {
+        let btn = document.createElement("button");
+        btn.textContent = language.title;
+        btn.value = index;
+        btn.classList.add("fade-in");
+        btn.onclick = () => {
+          setActive('language', index);
+        };
+        if(index === 0) btn.classList.add("active");
+        languageContainer.appendChild(btn);
+      });
+    }
+
+    function loadVideo() {
+      const seasonContainer = document.getElementById("season-container");
+      const episodeContainer = document.getElementById("episode-container");
+      const languageContainer = document.getElementById("language-container");
+      const activeSeasonButton = Array.from(seasonContainer.children).find(btn => btn.classList.contains("active"));
+      const activeEpisodeButton = Array.from(episodeContainer.children).find(btn => btn.classList.contains("active"));
+      const activeLanguageButton = Array.from(languageContainer.children).find(btn => btn.classList.contains("active"));
+      const seasonIndex = activeSeasonButton ? activeSeasonButton.value : 0;
+      const episodeIndex = activeEpisodeButton ? activeEpisodeButton.value : 0;
+      const languageIndex = activeLanguageButton ? activeLanguageButton.value : 0;
+      const episode = data.data.playlist[seasonIndex].folder[episodeIndex];
+      const language = episode.folder[languageIndex];
+
+      const streamUrl = "https://8stream.sakshamchugh.com/api/v1/getStream";
+      const payload = {
+        file: language.file,
+        id: episode.id,
+        key: data.data.key
+      };
+
+      fetch(streamUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+      .then(response => response.json())
+      .then(streamData => {
+        const videoUrl = streamData.data.link;
+        playVideo(videoUrl);
+      })
+      .catch(error => {
+        console.error('Error fetching stream data:', error);
+        alert('Error fetching stream data.');
+      });
+    }
+
+    function playVideo(url) {
+      const mediaPlayer = document.getElementById('media-player');
+      mediaPlayer.setAttribute('src', url);
+      mediaPlayer.setAttribute('title', titlex);
+      document.querySelector('media-poster').setAttribute('src', thumbnail);
+      const videoContainer = document.getElementById('video-container');
+      videoContainer.style.display = 'flex';
+    }
+  </script>
+</body>
+</html>

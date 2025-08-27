@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Getting Tickets...</title>
+  <style>
+    /* Modern animated gradient background */
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      font-family: 'Roboto', sans-serif;
+    }
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Glassmorphism container */
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      max-width: 90%;
+      opacity: 0;
+      animation: fadeIn 1.5s forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Modern text styles with subtle animations */
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: #fff;
+      animation: popIn 1s ease-out;
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    p {
+      font-size: 1rem;
+      margin: 1rem 0 2rem 0;
+      color: #f0f0f0;
+      animation: fadeInText 1.5s ease-out;
+    }
+    @keyframes fadeInText {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Modern spinner style */
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 6px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      margin: 0 auto;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+<script>
+  async function handleRedirect() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const imdbId = urlParams.get('id');
+
+    if (!imdbId) {
+      alert("Aww man... We are very sorry but the show wasn't found we are sed:(");
+      return;
+    }
+
+    // TMDB API endpoint using the provided API key and IMDb ID
+    const apiKey = 'df0daedd7538a65a227659c13a67d152';
+    const tmdbUrl = `https://tmdbapi.sakshamchugh.com/3/find/${imdbId}?api_key=${apiKey}&external_source=imdb_id`;
+
+    try {
+      const response = await fetch(tmdbUrl);
+      const result = await response.json();
+
+      // Determine if the IMDb id corresponds to a movie or a TV show.
+      if (result.movie_results && result.movie_results.length > 0) {
+        window.location.href = `https://sakshamchugh.com/movies-api/movies.html?id=${imdbId}`;
+      } else if (result.tv_results && result.tv_results.length > 0) {
+        window.location.href = `https://sakshamchugh.com/movies-api/season.html?id=${imdbId}`;
+      } else {
+        alert("Aww man... We are very sorry but the show wasn't found we are sed:(");
+      }
+    } catch (error) {
+      console.error('Error fetching data from TMDB API:', error);
+      alert("Aww man... We are very sorry but the show wasn't found we are sed:(");
+    }
+  }
+
+  window.onload = handleRedirect;
+</script>
+
+</head>
+<body>
+  <div class="container">
+    <h1>We are getting tickets for your show</h1>
+    <p>Hold tight, an epic experience is on its way!</p>
+    <div class="spinner"></div>
+  </div>
+</body>
+</html>

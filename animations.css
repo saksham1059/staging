@@ -1,0 +1,37 @@
+/* Imported transition wave styles adapted from old site */
+.reveal-up { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+.reveal-up.visible { opacity: 1; transform: none; }
+.reveal-left { opacity: 0; transform: translateX(-28px); transition: opacity .7s ease, transform .7s ease; }
+.reveal-left.visible { opacity: 1; transform: none; }
+.reveal-right { opacity: 0; transform: translateX(28px); transition: opacity .7s ease, transform .7s ease; }
+.reveal-right.visible { opacity: 1; transform: none; }
+
+.reveal-fade { opacity: 0; transition: opacity .9s ease; }
+.reveal-fade.visible { opacity: 1; }
+
+.hover-pulse { transition: transform .25s cubic-bezier(.645,.045,.355,1); }
+.hover-pulse:hover { transform: translateY(-2px) scale(1.02); }
+
+/* Brand hover (blue radial reveal) */
+.brand-hover {
+  background-color: #2563eb;
+  background-image: radial-gradient(circle at center, #60a5fa 50%, transparent 51%);
+  background-repeat: no-repeat;
+  background-size: 0 0;
+  background-position: 50% 50%;
+  transition: background-size .3s ease;
+}
+.brand-hover:hover { background-size: 220% 220%; }
+
+/* Section divider mimic */
+.section-underline { position: relative; }
+.section-underline:after { content: ""; position: absolute; left: 50%; bottom: -8px; width: 60px; height: 3px; background: #ff923e; transform: translateX(-50%); border-radius: 2px; }
+
+/* Sweep transition overlay (lightweight) */
+#transition-container { position: fixed; z-index: 9999; width: 200vw; bottom: -300%; transform: rotate(12deg); left: -40%; pointer-events: none; visibility: hidden; }
+.is-visible { visibility: visible; }
+.hideTopTransition { animation: hideTopTransition ease-in .7s; animation-fill-mode: forwards; }
+.showTransition { animation: showTransition ease-in .7s; animation-fill-mode: forwards; }
+@keyframes hideTopTransition { 0% { bottom: -120%; left: -40%; } 100% { bottom: 100%; left: 40%; } }
+@keyframes showTransition  { 0% { bottom: -600%; left: -60%; } 100% { bottom: -120%; left: -40%; } }
+
