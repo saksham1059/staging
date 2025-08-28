@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
+// Detect touch devices (no fine pointer)
+const isTouch = matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 // Typing effect for hero
 const typedText = document.getElementById('typed-text');
 const phrases = [
@@ -67,7 +69,7 @@ window.addEventListener('scroll', () => {
       if (active) active.classList.add('active');
     }
   }
-});
+}, { passive: true });
 
 // Smooth scroll for nav links
 navLinks.querySelectorAll('a').forEach(link => {
@@ -139,7 +141,7 @@ function revealProjects() {
     }
   });
 }
-window.addEventListener('scroll', revealProjects);
+window.addEventListener('scroll', revealProjects, { passive: true });
 window.addEventListener('load', revealProjects);
 
 // Animate About Me skill bars
@@ -151,12 +153,13 @@ function revealAboutMe() {
     aboutLeft.classList.add('visible');
   }
 }
-window.addEventListener('scroll', revealAboutMe);
+window.addEventListener('scroll', revealAboutMe, { passive: true });
 window.addEventListener('load', revealAboutMe);
 
 // 3D tilt effect
 // Use fresh query each time to avoid undefined errors
 function addTiltEffect() {
+  if (isTouch) return; // Skip on touch devices
   document.querySelectorAll('.project-card').forEach(card => {
     card.addEventListener('mousemove', e => {
       const rect = card.getBoundingClientRect();
@@ -168,11 +171,11 @@ function addTiltEffect() {
       const rotateY = ((x - centerX) / centerX) * -10;
       card.classList.add('tilt');
       card.style.transform = `translateY(0) scale(1.03) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
+    }, { passive: true });
     card.addEventListener('mouseleave', () => {
       card.classList.remove('tilt');
       card.style.transform = '';
-    });
+    }, { passive: true });
   });
 }
 addTiltEffect();
@@ -203,7 +206,7 @@ if (backToTop) {
     } else {
       backToTop.classList.remove('show');
     }
-  });
+  }, { passive: true });
   backToTop.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
@@ -211,32 +214,37 @@ if (backToTop) {
 
 // Custom smooth cursor
 const cursor = document.getElementById('custom-cursor');
-let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
-let cursorX = mouseX, cursorY = mouseY;
-function animateCursor() {
-  cursorX += (mouseX - cursorX) * 0.18;
-  cursorY += (mouseY - cursorY) * 0.18;
-  cursor.style.left = cursorX + 'px';
-  cursor.style.top = cursorY + 'px';
-  requestAnimationFrame(animateCursor);
+if (!isTouch && cursor) {
+  let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+  let cursorX = mouseX, cursorY = mouseY;
+  function animateCursor() {
+    cursorX += (mouseX - cursorX) * 0.18;
+    cursorY += (mouseY - cursorY) * 0.18;
+    cursor.style.left = cursorX + 'px';
+    cursor.style.top = cursorY + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  }, { passive: true });
+  // Cursor hover effect
+  const hoverables = ['a', 'button', '.cta-btn', '.project-card', '.nav-link', '.tags span', '.service-card', '.faq-item', 'img', '.tech-icon', '.skill-item', '.aboutme-skill', '.aboutme-stat', '.project-card img', '.service-card img'];
+  document.querySelectorAll(hoverables.join(',')).forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.classList.add('cursor-hover');
+      el.classList.add('cursor-captured');
+    }, { passive: true });
+    el.addEventListener('mouseleave', () => {
+      cursor.classList.remove('cursor-hover');
+      el.classList.remove('cursor-captured');
+    }, { passive: true });
+  });
+} else {
+  // Hide custom cursor on touch devices
+  if (cursor) cursor.style.display = 'none';
 }
-animateCursor();
-document.addEventListener('mousemove', e => {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-});
-// Cursor hover effect
-const hoverables = ['a', 'button', '.cta-btn', '.project-card', '.nav-link', '.tags span', '.service-card', '.faq-item', 'img', '.tech-icon', '.skill-item', '.aboutme-skill', '.aboutme-stat', '.project-card img', '.service-card img'];
-document.querySelectorAll(hoverables.join(',')).forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cursor.classList.add('cursor-hover');
-    el.classList.add('cursor-captured');
-  });
-  el.addEventListener('mouseleave', () => {
-    cursor.classList.remove('cursor-hover');
-    el.classList.remove('cursor-captured');
-  });
-});
 
 // Remove dark mode logic from floating-action-btn
 const fab = document.getElementById('floating-action-btn');
@@ -267,12 +275,14 @@ animatedEls.forEach(el => observer.observe(el));
 
 // Parallax effect for .parallax-shape
 const parallaxShapes = document.querySelectorAll('.parallax-shape');
-document.addEventListener('mousemove', e => {
-  const x = e.clientX / window.innerWidth - 0.5;
-  const y = e.clientY / window.innerHeight - 0.5;
-  parallaxShapes.forEach((shape, i) => {
-    const factor = (i + 1) * 18;
-    shape.style.transform = `translate(${x * factor}px, ${y * factor}px) scale(1)`;
-  });
-});
+if (!isTouch) {
+  document.addEventListener('mousemove', e => {
+    const x = e.clientX / window.innerWidth - 0.5;
+    const y = e.clientY / window.innerHeight - 0.5;
+    parallaxShapes.forEach((shape, i) => {
+      const factor = (i + 1) * 18;
+      shape.style.transform = `translate(${x * factor}px, ${y * factor}px) scale(1)`;
+    });
+  }, { passive: true });
+}
 }); 
